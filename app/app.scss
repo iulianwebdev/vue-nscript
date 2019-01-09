@@ -1,2 +1,17 @@
 // Global SCSS styling
 // @see https://docs.nativescript.org/ui/styling
+@import '~nativescript-theme-core/css/core.light.css';
+
+.fa {
+    font-family: "Font Awesome", "fontawesome-webfont";
+    // font-weight: 400;
+    font-size: 20;
+}
+
+.action-bar-btn {
+    width:40;
+    height: 40;
+    border-width: 1;
+    border-color: transparent;
+    // background: transparent;
+}
