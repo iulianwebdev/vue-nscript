@@ -1,14 +1,18 @@
 <template>
     <Page>
-        <ActionBar title="Categories" />
-            <GridLayout rows="*">
-                <ListView for="item in data" @itemTap="onItemTap">
-                  <v-template>
-                    <!-- Shows the list item label in the default color and style. -->
-                    <Label :text="item.text" />
-                  </v-template>
-                </ListView>
-            </GridLayout>
+        <ActionBar class="action-bar p-r-5" title="Categories" flat="true">
+                <ActionItem @tap="addItem" ios.position="right" android.position="actionBar" class="">
+                    <Button class="fa action-bar-btn btn btn-active btn-outline">{{'fa-plus' | fonticon }}</Button>
+                </ActionItem>
+            </ActionBar>  
+        <StackLayout>
+            <ListView for="item in categories" @itemTap="editCategory">
+              <v-template>
+                <!-- Shows the list item label in the default color and style. -->
+                <Label :text="item.text" />
+              </v-template>
+            </ListView>
+        </StackLayout>
     </Page>
 </template>
 <script>
@@ -17,9 +21,9 @@ export default {
         return {
             msg: 'Hello World!',
             btnText: 'Button',
-            data:[
-            {text:'Text 1'},
-            {text:'Text 2'}
+            categories:[
+                {text:'Text 1'},
+                {text:'Text 2'}
             ]
         }
     },
@@ -28,22 +32,22 @@ export default {
         this.$store.dispatch('init');
     },
     methods: {
-        onButtonTap() {
-            this.msg = 'Sweet Jesus!';
-            // console.log('test',this.$store);
+        addItem() {
+            console.log('Adding category');
 
-            this.btnText = 'Clicked';
+            // this.btnText = 'Clicked';
+            this.categories.push({text:'new Item'})
 
+        },
+        editCategory(){
+            console.log('Edit');
         }
     }
 
 }
 </script>
 <style scoped>
-ActionBar {
-    background-color: #53ba82;
-    color: #ffffff;
-}
+
 
 .message {
     vertical-align: center;

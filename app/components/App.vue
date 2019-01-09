@@ -23,7 +23,6 @@ export default {
     },
     methods: {
         onButtonTap() {
-            this.msg = 'Sweet Jesus!';
             // console.log('test',this.$store);
 
             this.btnText = 'Clicked';

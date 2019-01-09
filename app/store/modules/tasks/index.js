@@ -5,7 +5,7 @@ const state = {
 const getters = {}
 const mutations = {
     load(state, { data }) {
-        state.tasks.splice(0).push(...Array.from(new Set(state.tasks)));
+        state.tasks.splice(0).push(...Array.from(new Set(state.tasks.push(data))));
     },
     save(state, { data }) {
         state.tasks.push(data);
