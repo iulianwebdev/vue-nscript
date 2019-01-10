@@ -1,33 +1,46 @@
 <template>
     <Page>
-        <ActionBar class="action-bar p-r-5" title="Categories" flat="true">
-                <ActionItem @tap="addItem" ios.position="right" android.position="actionBar" class="">
-                    <Button class="fa action-bar-btn btn btn-active btn-outline">{{'fa-plus' | fonticon }}</Button>
-                </ActionItem>
-            </ActionBar>  
-        <StackLayout>
-            <ListView for="item in categories" @itemTap="editCategory">
+        <ActionBar class="action-bar p-r-5" :title="title" flat="true">
+            <ActionItem @tap="addItem" ios.position="right" android.position="actionBar">
+                <Button class="fa action-bar-btn btn btn-active btn-outline">{{'fa-plus' | fonticon }}</Button>
+            </ActionItem>
+        </ActionBar>  
+        <StackLayout class="container">
+            <ListView class="list-group" for="item in categories" @itemTap="editCategory">
               <v-template>
                 <!-- Shows the list item label in the default color and style. -->
-                <Label :text="item.text" />
+                <FlexboxLayout flexDirection="row" class="list-group-item">
+                    <!-- <Image [src]="country.imageSrc" class="thumb img-circle"></Image> -->
+                    <Label :text="item.text" class="list-group-item-heading"
+                        verticalAlignment="center" style="width: 100%"></Label>
+                </FlexboxLayout>
+                <!-- <Label :text="item.text" /> -->
               </v-template>
             </ListView>
         </StackLayout>
     </Page>
 </template>
 <script>
+import Modal from './SaveModal'
 export default {
     data() {
         return {
-            msg: 'Hello World!',
             btnText: 'Button',
+            displayPopup: false,
             categories:[
                 {text:'Text 1'},
                 {text:'Text 2'}
             ]
         }
     },
+    computed: {
+        title(){
+            // if(this.displayPopup) return 'New Category';
+            return 'All Categories';
+        }
+    },
     mounted() {
+        global.$tc = this;
         console.log('test');
         this.$store.dispatch('init');
     },
@@ -36,12 +49,19 @@ export default {
             console.log('Adding category');
 
             // this.btnText = 'Clicked';
-            this.categories.push({text:'new Item'})
+            this.openModal();
+            // this.categories.push({text:'new Item'})
+
 
         },
         editCategory(){
-            console.log('Edit');
+            console.log('add');
+        },
+        openModal(){
+            this.$showModal(Modal, {props:{title:'TEST TEXT', fields:[]}})
         }
+
+
     }
 
 }
@@ -58,7 +78,13 @@ export default {
     border-bottom-width: 2;
     border-bottom-color: red;
 }
-
+.container {
+    background: lightyellow;
+}
+.list-group {
+    background: lightgreen;
+    height: 100%;
+}
 .btn {
     margin-top: 10
 }
