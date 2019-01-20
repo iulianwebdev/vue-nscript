@@ -4,9 +4,10 @@ const state = {
 
 const getters = {}
 const mutations = {
-    load(state, { data }) {
-        state.tasks.splice(0).push(...Array.from(new Set(state.tasks.push(data))));
-    },
+    // No need for batch insert
+    // load(state, { data }) {
+    //     state.tasks.splice(0).push(...Array.from(new Set(state.tasks, ...data)));
+    // },
     save(state, { data }) {
         state.tasks.push(data);
     }

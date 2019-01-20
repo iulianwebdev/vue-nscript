@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
+import categoriesModule from './modules/categories';
 import listsModule from './modules/lists';
 import tasksModule from './modules/tasks';
 import database from './database'
@@ -13,6 +14,7 @@ export default new Vuex.Store({
     actions:database.actions,
 
     modules: {
+        categories: categoriesModule,
         lists: listsModule,
         tasks: tasksModule
     },

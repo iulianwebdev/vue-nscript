@@ -1,56 +1,59 @@
-const { relative, resolve, sep } = require("path");
+const { relative, resolve, sep } = require('path');
 
-const webpack = require("webpack");
-const CleanWebpackPlugin = require("clean-webpack-plugin");
-const CopyWebpackPlugin = require("copy-webpack-plugin");
-const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
+const webpack = require('webpack');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const TerserPlugin = require('terser-webpack-plugin');
 
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
-const NsVueTemplateCompiler = require("nativescript-vue-template-compiler");
+const NsVueTemplateCompiler = require('nativescript-vue-template-compiler');
 
-const nsWebpack = require("nativescript-dev-webpack");
-const nativescriptTarget = require("nativescript-dev-webpack/nativescript-target");
-const { NativeScriptWorkerPlugin } = require("nativescript-worker-loader/NativeScriptWorkerPlugin");
+const nsWebpack = require('nativescript-dev-webpack');
+const nativescriptTarget = require('nativescript-dev-webpack/nativescript-target');
+const { NativeScriptWorkerPlugin } = require('nativescript-worker-loader/NativeScriptWorkerPlugin');
 
 module.exports = env => {
     // Add your custom Activities, Services and other android app components here.
     const appComponents = [
-        "tns-core-modules/ui/frame",
-        "tns-core-modules/ui/frame/activity",
+        'tns-core-modules/ui/frame',
+        'tns-core-modules/ui/frame/activity',
     ];
 
-    const platform = env && (env.android && "android" || env.ios && "ios");
+    const platform = env && (env.android && 'android' || env.ios && 'ios');
     if (!platform) {
-        throw new Error("You need to provide a target platform!");
+        throw new Error('You need to provide a target platform!');
     }
 
-    const platforms = ["ios", "android"];
+    const platforms = ['ios', 'android'];
     const projectRoot = __dirname;
 
     // Default destination inside platforms/<platform>/...
     const dist = resolve(projectRoot, nsWebpack.getAppPath(platform, projectRoot));
-    const appResourcesPlatformDir = platform === "android" ? "Android" : "iOS";
+    const appResourcesPlatformDir = platform === 'android' ? 'Android' : 'iOS';
 
     const {
         // The 'appPath' and 'appResourcesPath' values are fetched from
         // the nsconfig.json configuration file
         // when bundling with `tns run android|ios --bundle`.
-        appPath = "app",
-            appResourcesPath = "app/App_Resources",
+        appPath = 'app',
+        appResourcesPath = 'app/App_Resources',
 
-            // You can provide the following flags when running 'tns run android|ios'
-            snapshot, // --env.snapshot
-            production, // --env.production
-            report, // --env.report
-            hmr, // --env.hmr
+        // You can provide the following flags when running 'tns run android|ios'
+        snapshot, // --env.snapshot
+        production, // --env.production
+        report, // --env.report
+        hmr, // --env.hmr
     } = env;
 
     const externals = (env.externals || []).map((e) => { // --env.externals
-        return new RegExp(e + ".*");
+        let ext = new RegExp(e + '.*');
+        ext['nativescript-sqlite-commercial'] = 'nativescript-sqlite-commercial';
+        ext['nativescript-sqlite-encrypted'] = 'nativescript-sqlite-encrypted';
+        return ext;
     });
 
-    const mode = production ? "production" : "development"
+    const mode = production ? 'production' : 'development';
 
     const appFullPath = resolve(projectRoot, appPath);
     const appResourcesFullPath = resolve(projectRoot, appResourcesPath);
@@ -58,7 +61,6 @@ module.exports = env => {
     const entryModule = nsWebpack.getEntryModule(appFullPath);
     const entryPath = `.${sep}${entryModule}.js`;
     console.log(`Bundling application for entryPath ${entryPath}...`);
-
     const config = {
         mode: mode,
         context: appFullPath,
@@ -67,7 +69,7 @@ module.exports = env => {
             ignored: [
                 appResourcesFullPath,
                 // Don't watch hidden files
-                "**/.*",
+                '**/.*',
             ],
         },
         target: nativescriptTarget,
@@ -78,18 +80,18 @@ module.exports = env => {
         output: {
             pathinfo: false,
             path: dist,
-            libraryTarget: "commonjs2",
-            filename: "[name].js",
-            globalObject: "global",
+            libraryTarget: 'commonjs2',
+            filename: '[name].js',
+            globalObject: 'global',
         },
         resolve: {
-            extensions: [".vue", ".js", ".scss", ".css"],
+            extensions: ['.vue', '.js', '.scss', '.css'],
             // Resolve {N} system modules from tns-core-modules
             modules: [
-                resolve(__dirname, "node_modules/tns-core-modules"),
-                resolve(__dirname, "node_modules"),
-                "node_modules/tns-core-modules",
-                "node_modules",
+                resolve(__dirname, 'node_modules/tns-core-modules'),
+                resolve(__dirname, 'node_modules'),
+                'node_modules/tns-core-modules',
+                'node_modules',
             ],
             alias: {
                 '~': appFullPath,
@@ -105,19 +107,20 @@ module.exports = env => {
         },
         node: {
             // Disable node shims that conflict with NativeScript
-            "http": false,
-            "timers": false,
-            "setImmediate": false,
-            "fs": "empty",
-            "__dirname": false,
+            'http': false,
+            'timers': false,
+            'setImmediate': false,
+            'fs': 'empty',
+            '__dirname': false,
         },
-        devtool: "none",
+        devtool: 'none',
+        // devtool: 'eval-source-map',
         optimization: {
             splitChunks: {
                 cacheGroups: {
                     vendor: {
-                        name: "vendor",
-                        chunks: "all",
+                        name: 'vendor',
+                        chunks: 'all',
                         test: (module) => {
                             const moduleName = module.nameForCondition ? module.nameForCondition() : '';
                             return /[\\/]node_modules[\\/]/.test(moduleName) ||
@@ -140,10 +143,10 @@ module.exports = env => {
                         compress: {
                             // The Android SBG has problems parsing the output
                             // when these options are enabled
-                            'collapse_vars': platform !== "android",
-                            sequences: platform !== "android",
+                            'collapse_vars': platform !== 'android',
+                            sequences: platform !== 'android',
                         },
-                        safari10: platform === "ios",
+                        safari10: platform === 'ios',
                         keep_fnames: true,
                     },
                 }),
@@ -151,51 +154,51 @@ module.exports = env => {
         },
         module: {
             rules: [{
-                    test: new RegExp(entryPath),
-                    use: [
-                        // Require all Android app components
-                        platform === "android" && {
-                            loader: "nativescript-dev-webpack/android-app-components-loader",
-                            options: { modules: appComponents },
-                        },
-
-                        {
-                            loader: "nativescript-dev-webpack/bundle-config-loader",
-                            options: {
-                                registerPages: true, // applicable only for non-angular apps
-                                loadCss: !snapshot, // load the application css if in debug mode
-                            },
-                        },
-                    ].filter(loader => Boolean(loader)),
-                },
-                {
-                    test: /\.css$/,
-                    use: [
-                        'nativescript-dev-webpack/style-hot-loader',
-                        'nativescript-dev-webpack/apply-css-loader.js',
-                        { loader: "css-loader", options: { minimize: false, url: false } },
-                    ],
-                },
-                {
-                    test: /\.scss$/,
-                    use: [
-                        'nativescript-dev-webpack/style-hot-loader',
-                        'nativescript-dev-webpack/apply-css-loader.js',
-                        { loader: "css-loader", options: { minimize: false, url: false } },
-                        "sass-loader",
-                    ],
-                },
-                {
-                    test: /\.js$/,
-                    loader: 'babel-loader',
-                },
-                {
-                    test: /\.vue$/,
-                    loader: "vue-loader",
-                    options: {
-                        compiler: NsVueTemplateCompiler,
+                test: new RegExp(entryPath),
+                use: [
+                    // Require all Android app components
+                    platform === 'android' && {
+                        loader: 'nativescript-dev-webpack/android-app-components-loader',
+                        options: { modules: appComponents },
                     },
+
+                    {
+                        loader: 'nativescript-dev-webpack/bundle-config-loader',
+                        options: {
+                            registerPages: true, // applicable only for non-angular apps
+                            loadCss: !snapshot, // load the application css if in debug mode
+                        },
+                    },
+                ].filter(loader => Boolean(loader)),
+            },
+            {
+                test: /\.css$/,
+                use: [
+                    'nativescript-dev-webpack/style-hot-loader',
+                    'nativescript-dev-webpack/apply-css-loader.js',
+                    { loader: 'css-loader', options: { minimize: false, url: false } },
+                ],
+            },
+            {
+                test: /\.scss$/,
+                use: [
+                    'nativescript-dev-webpack/style-hot-loader',
+                    'nativescript-dev-webpack/apply-css-loader.js',
+                    { loader: 'css-loader', options: { minimize: false, url: false } },
+                    'sass-loader',
+                ],
+            },
+            {
+                test: /\.js$/,
+                loader: 'babel-loader',
+            },
+            {
+                test: /\.vue$/,
+                loader: 'vue-loader',
+                options: {
+                    compiler: NsVueTemplateCompiler,
                 },
+            },
             ],
         },
         plugins: [
@@ -204,8 +207,8 @@ module.exports = env => {
             new VueLoaderPlugin(),
             // Define useful constants like TNS_WEBPACK
             new webpack.DefinePlugin({
-                "global.TNS_WEBPACK": "true",
-                "TNS_ENV": JSON.stringify(mode)
+                'global.TNS_WEBPACK': 'true',
+                'TNS_ENV': JSON.stringify(mode)
             }),
             // Remove all files from the out dir.
             new CleanWebpackPlugin([`${dist}/**/*`]),
@@ -217,16 +220,16 @@ module.exports = env => {
             }]),
             // Copy assets to out dir. Add your own globs as needed.
             new CopyWebpackPlugin([
-                { from: "fonts/**" },
-                { from: "**/*.+(jpg|png)" },
-                { from: "assets/**/*" },
+                { from: 'fonts/**' },
+                { from: '**/*.+(jpg|png)' },
+                { from: 'assets/**/*' },
                 // copy the sqlite db
-                { from: "database/*.sqlite"},
+                { from: 'database/*.sqlite'},
             ], { ignore: [`${relative(appPath, appResourcesFullPath)}/**`] }),
             // Generate a bundle starter script and activate it in package.json
             new nsWebpack.GenerateBundleStarterPlugin([
-                "./vendor",
-                "./bundle",
+                './vendor',
+                './bundle',
             ]),
             // For instructions on how to set up workers with webpack
             // check out https://github.com/nativescript/worker-loader
@@ -243,19 +246,19 @@ module.exports = env => {
     if (report) {
         // Generate report files for bundles content
         config.plugins.push(new BundleAnalyzerPlugin({
-            analyzerMode: "static",
+            analyzerMode: 'static',
             openAnalyzer: false,
             generateStatsFile: true,
-            reportFilename: resolve(projectRoot, "report", `report.html`),
-            statsFilename: resolve(projectRoot, "report", `stats.json`),
+            reportFilename: resolve(projectRoot, 'report', 'report.html'),
+            statsFilename: resolve(projectRoot, 'report', 'stats.json'),
         }));
     }
 
     if (snapshot) {
         config.plugins.push(new nsWebpack.NativeScriptSnapshotPlugin({
-            chunk: "vendor",
+            chunk: 'vendor',
             requireModules: [
-                "tns-core-modules/bundle-entry-points",
+                'tns-core-modules/bundle-entry-points',
             ],
             projectRoot,
             webpackConfig: config,

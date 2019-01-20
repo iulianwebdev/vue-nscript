@@ -14,24 +14,27 @@
       "version": "5.0.0"
     },
     "tns-android": {
-      "version": "5.0.0"
+      "version": "5.1.0"
     }
   },
   "dependencies": {
     "nativescript-fonticon": "^2.0.0",
     "nativescript-socket.io": "^0.9.0",
-    "nativescript-sqlite": "^2.2.3",
+    "nativescript-sqlite": "^2.3.0",
     "nativescript-theme-core": "^1.0.4",
     "nativescript-toast": "^1.4.6",
-    "nativescript-unit-test-runner": "^0.3.4",
+    "nativescript-ui-calendar": "^3.10.0",
+    "nativescript-ui-core": "^2.0.1",
+    "nativescript-ui-listview": "^5.1.0",
     "nativescript-vue": "^2.0.0",
-    "tns-core-modules": "^5.0.2",
-    "vuex": "^3.0.1"
+    "nativescript-vue-devtools": "^1.1.0",
+    "tns-core-modules": "^5.1.2",
+    "vuex": "^3.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",
     "@babel/preset-env": "^7.0.0",
-    "@vue/devtools": "5.0.0-beta.3",
+    "@vue/devtools": "^5.0.0-beta.3",
     "babel-loader": "^8.0.2",
     "babel-traverse": "6.26.0",
     "babel-types": "6.26.0",
@@ -43,15 +46,15 @@
     "karma-jasmine": "2.0.1",
     "karma-nativescript-launcher": "0.4.0",
     "lazy": "1.0.11",
-    "nativescript-dev-webpack": "^0.19.1-next-2019-01-07-183746-01",
-    "nativescript-vue-devtools": "^1.0.0",
+    "nativescript-dev-webpack": "^0.19.1-next-2019-01-14-120258-01",
+    "nativescript-unit-test-runner": "^0.3.4",
     "nativescript-vue-template-compiler": "^2.0.0",
     "nativescript-worker-loader": "~0.9.0",
     "node-sass": "^4.9.2",
     "sass-loader": "^7.1.0",
     "terser-webpack-plugin": "^1.1.0",
     "vue-loader": "^15.5.1",
-    "webpack": "^4.28.1",
+    "webpack": "^4.29.0",
     "webpack-bundle-analyzer": "~2.13.1",
     "webpack-cli": "^3.2.1"
   }

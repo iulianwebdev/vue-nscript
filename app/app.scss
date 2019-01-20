@@ -8,10 +8,31 @@
     font-size: 20;
 }
 
-.action-bar-btn {
+.bd {
+    border-width: 2;
+}
+
+.danger {
+    color:lighten($color: red, $amount: 20%);
+}
+
+.bd-red {
+    @extend .bd;
+    border-color: red;
+}
+
+.bd-blue {
+    @extend .bd;
+    border-color: blue;
+}
+
+.fa-btn {
     width:40;
     height: 40;
-    border-width: 1;
-    border-color: transparent;
-    // background: transparent;
+    @extend .no-bg
+}
+
+.no-bg {
+   border-width: 1;
+   border-color: transparent; 
 }
